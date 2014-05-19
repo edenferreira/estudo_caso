@@ -4,9 +4,9 @@ from grafos import *
 
 class FilaPrioridade:
 
-    def __init__(self, fila=[]):
-        heapify(fila)
-        self.fila = fila
+    def __init__(self):
+        self.fila = []
+        heapify(self.fila)
         self.busca_entrada = dict()
         self.retirado = '<removido>'
 
