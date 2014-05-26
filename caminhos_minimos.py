@@ -15,14 +15,11 @@ class AStar:
         self.visitados = set()
         self.distancia = {}
         for pt in grafo.pontos:
-            self.distancia[pt] = float('inf')
-        
-    def calc_prdd(self, pt_atual, dist_atual, pt, dist):
-        return dist_atual + dist + self.grafo.dist(pt_atual,self.origem_destino[1])        
+            self.distancia[pt] = float('inf')      
     
     def processa_arco(self, pt_atual, dist_atual, pt, dist):
-        if pt not in self.visitados and self.distancia[pt] > dist_atual + dist:
-            self.nao_visitados[pt] = self.calc_prdd(pt_atual, dist_atual, pt, dist)
+        if self.distancia[pt] > dist_atual + dist:
+            self.nao_visitados[pt] = dist_atual + dist + self.grafo.dist(pt_atual,self.origem_destino[1]) 
             self.distancia[pt] = dist_atual + dist
             self.anterior[pt] = pt_atual
     
@@ -52,7 +49,45 @@ class AStar:
         caminho.reverse()
         return caminho
 
-class Dijkstra(AStar):
+class Dijkstra:
         
-    def calc_prdd(self, pt_atual, dist_atual, pt, dist):
-        return dist_atual + dist
+    def __init__(self, grafo=Digrafo()):
+        self.grafo = grafo
+        self.num_passos = 0
+        self.origem_destino = None
+        self.anterior = {}
+        self.dist_total = 0
+        self.visitados = set()
+        self.nao_visitados = PQDict()
+        for pt in grafo.pontos:
+            self.nao_visitados[pt] = float('inf')
+    
+    def processa_arco(self, pt_atual, dist_atual, pt, dist):
+        if pt not in self.visitados and self.nao_visitados[pt] > dist_atual + dist:
+            self.nao_visitados[pt] = dist_atual + dist
+            self.anterior[pt] = pt_atual
+    
+    def executar(self, pt_a, pt_b):
+        self.origem_destino = (pt_a, pt_b)
+        self.nao_visitados[pt_a] = 0
+        pt_atual = None
+        while pt_atual != pt_b and self.nao_visitados:
+            self.num_passos += 1
+            pt_atual, dist_atual = self.nao_visitados.popitem()
+            for pt, dist in self.grafo.arcos[pt_atual]:
+                if pt not in self.visitados:
+                    self.processa_arco(pt_atual, dist_atual, pt, dist)            
+            self.visitados.add(pt_atual)
+            self.dist_total = dist_atual
+    
+    @property
+    def caminho(self):
+        caminho = list()
+        pt_atual = self.origem_destino[1]
+        while pt_atual != self.origem_destino[0]:
+            caminho.append(pt_atual)
+            pt_atual = self.anterior[pt_atual]
+        caminho.append(pt_atual)
+        caminho.reverse()
+        return caminho
+        
