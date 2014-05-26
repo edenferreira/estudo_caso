@@ -3,7 +3,7 @@ from collections import defaultdict
 from random import *
 from math import sqrt
 
-class Digrafo:
+class Digrafo:  
 
     def __init__(self):
         self.pontos = set()
@@ -28,7 +28,7 @@ class Digrafo:
     @staticmethod
     def gerar_aleatoriamente(grid_x, grid_y, max_x, max_y, distancia_min):
         grafo = Digrafo()
-        mult_ident_ponto = 10000000 #Multiplicador para identificação unica de cada ponto adicionado
+        mult_ident_ponto = 10000000 #Multiplicador para identificacao unica de cada ponto adicionado
 
         fracao_x, fracao_y = max_x/grid_x, max_y/grid_y
         tam_min_x = distancia_min / 2
@@ -52,21 +52,34 @@ class Digrafo:
         for key_x, x in p_x.items():
             for key_y, y in p_y.items():
                 grafo.add_ponto((key_x * mult_ident_ponto) + key_y, uniform(x[0], x[1]), uniform(y[0], y[1]))
-
-        for i in range(grid_x - 1):
-            for j in range(grid_y - 1):
-                pt_atual = (i * mult_ident_ponto) + j
-                pt_direita = (i * mult_ident_ponto) + j + 1
-                pt_abaixo = ((i + 1) * mult_ident_ponto) + j
-                if (i / mult_ident_ponto) % 2 == 0:
-                    grafo.add_arco(pt_atual, pt_direita, grafo.dist(pt_atual,pt_direita) * uniform(1,1.5))
-                else:
-                    grafo.add_arco(pt_direita, pt_atual, grafo.dist(pt_direita, pt_atual) * uniform(1,1.5))
-                if j % 2 == 0:
-                    grafo.add_arco(pt_abaixo, pt_atual, grafo.dist(pt_abaixo, pt_atual) * uniform(1,1.5))
-                else:
-                    grafo.add_arco(pt_atual, pt_abaixo, grafo.dist(pt_atual, pt_abaixo) * uniform(1,1.5))
-
+                
+            
+        hor = []
+        for i in range(grid_x):
+            if i%2 == 0:
+                for j in range(grid_y):
+                    hor.append((i*mult_ident_ponto)+j)
+            else:
+                for j in reversed(range(grid_y)):
+                    hor.append((i*mult_ident_ponto)+j)
+        
+        ver = []
+        for j in range(grid_y):
+            if j%2 == 0:
+                for i in range(grid_x):
+                    ver.append((i*mult_ident_ponto)+j)
+            else:        
+                for i in reversed(range(grid_x)):
+                    ver.append((i*mult_ident_ponto)+j)
+        
+        for i in range(len(hor)-1):
+            grafo.add_arco(hor[i], hor[i+1], round(grafo.dist(hor[i],hor[i+1])) * uniform(1,1.5))
+        
+        
+        for i in range(len(ver)-1):
+            grafo.add_arco(ver[i], ver[i+1], round(grafo.dist(ver[i],ver[i+1])) * uniform(1,1.5))                
+            
+        
         for i in range(len(grafo)//10):
             pt_a, pt_b = sample(grafo.pontos,2)
             grafo.add_arco(pt_a, pt_b, grafo.dist(pt_a, pt_b) * uniform(1,1.5))
