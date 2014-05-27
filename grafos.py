@@ -20,7 +20,8 @@ class Digrafo:
 
     def add_arco(self,pt_a,pt_b,peso):
         if pt_a not in self.arcos:
-            self.arcos[pt_a][pt_b] = peso
+            self.arcos[pt_a] = {}
+        self.arcos[pt_a][pt_b] = peso
 
     def dist(self, pt_a, pt_b):
         return sqrt(((self.pos_pontos[pt_b][0] - self.pos_pontos[pt_a][0]) ** 2)
