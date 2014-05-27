@@ -33,8 +33,9 @@ class AStar:
             self.num_passos += 1
             pt_atual = self.nao_visitados.popitem()[0]
             dist_atual = self.distancia[pt_atual]
-            for pt, dist in self.grafo.arcos[pt_atual]:
-                self.processa_arco(pt_atual, dist_atual, pt, dist)
+            for pt in self.grafo.arcos[pt_atual]:
+                if pt not in self.visitados:
+                    self.processa_arco(pt_atual, dist_atual, pt, self.grafo.arcos[pt_atual][pt])
             self.visitados.add(pt_atual)
             self.dist_total = dist_atual
     
@@ -42,8 +43,10 @@ class AStar:
     def caminho(self):
         caminho = list()
         pt_atual = self.origem_destino[1]
+        dist_total = 0
         while pt_atual != self.origem_destino[0]:
             caminho.append(pt_atual)
+            dist_total += self.grafo.arcos[self.anterior[pt_atual]][pt_atual]
             pt_atual = self.anterior[pt_atual]
         caminho.append(pt_atual)
         caminho.reverse()
@@ -63,7 +66,7 @@ class Dijkstra:
             self.nao_visitados[pt] = float('inf')
     
     def processa_arco(self, pt_atual, dist_atual, pt, dist):
-        if pt not in self.visitados and self.nao_visitados[pt] > dist_atual + dist:
+        if self.nao_visitados[pt] > dist_atual + dist:
             self.nao_visitados[pt] = dist_atual + dist
             self.anterior[pt] = pt_atual
     
@@ -74,9 +77,9 @@ class Dijkstra:
         while pt_atual != pt_b and self.nao_visitados:
             self.num_passos += 1
             pt_atual, dist_atual = self.nao_visitados.popitem()
-            for pt, dist in self.grafo.arcos[pt_atual]:
+            for pt in self.grafo.arcos[pt_atual]:
                 if pt not in self.visitados:
-                    self.processa_arco(pt_atual, dist_atual, pt, dist)            
+                    self.processa_arco(pt_atual, dist_atual, pt, self.grafo.arcos[pt_atual][pt])            
             self.visitados.add(pt_atual)
             self.dist_total = dist_atual
     
