@@ -1,96 +1,101 @@
 author = 'Eden Thiago Ferreira'
 import time
-from grafos import *   
 from pqdict import *
-        
-class AStar:
-
-    def __init__(self, grafo=Digrafo()):
-        self.grafo = grafo
-        self.num_passos = 0
-        self.origem_destino = None
-        self.anterior = {}
-        self.dist_total = 0
-        self.nao_visitados = PQDict()
-        self.visitados = set()
-        self.distancia = {}
-        for pt in grafo.pontos:
-            self.distancia[pt] = float('inf')      
-    
-    def processa_arco(self, pt_atual, dist_atual, pt, dist):
-        if self.distancia[pt] > dist_atual + dist:
-            self.nao_visitados[pt] = dist_atual + dist + self.grafo.dist(pt_atual,self.origem_destino[1]) 
-            self.distancia[pt] = dist_atual + dist
-            self.anterior[pt] = pt_atual
-    
-    def executar(self, pt_a, pt_b):        
-        self.num_passos = 0
-        self.origem_destino = (pt_a, pt_b)
-        self.nao_visitados[pt_a] = 0
-        self.distancia[pt_a] = 0
-        pt_atual = None
-        while pt_atual != pt_b and self.nao_visitados:
-            self.num_passos += 1
-            pt_atual = self.nao_visitados.popitem()[0]
-            dist_atual = self.distancia[pt_atual]
-            for pt in self.grafo.arcos[pt_atual]:
-                if pt not in self.visitados:
-                    self.processa_arco(pt_atual, dist_atual, pt, self.grafo.arcos[pt_atual][pt])
-            self.visitados.add(pt_atual)
-            self.dist_total = dist_atual
-    
-    @property
-    def caminho(self):
-        caminho = list()
-        pt_atual = self.origem_destino[1]
-        dist_total = 0
-        while pt_atual != self.origem_destino[0]:
-            caminho.append(pt_atual)
-            dist_total += self.grafo.arcos[self.anterior[pt_atual]][pt_atual]
-            pt_atual = self.anterior[pt_atual]
-        caminho.append(pt_atual)
-        caminho.reverse()
-        return caminho
+from grafos import *
 
 class Dijkstra:
         
     def __init__(self, grafo=Digrafo()):
         self.grafo = grafo
-        self.num_passos = 0
-        self.origem_destino = None
+        self.pt_a = None
+        self.pt_b = None
         self.anterior = {}
         self.dist_total = 0
         self.visitados = set()
         self.nao_visitados = PQDict()
-        for pt in grafo.pontos:
-            self.nao_visitados[pt] = float('inf')
+        self.__caminho = []
     
-    def processa_arco(self, pt_atual, dist_atual, pt, dist):
-        if self.nao_visitados[pt] > dist_atual + dist:
-            self.nao_visitados[pt] = dist_atual + dist
-            self.anterior[pt] = pt_atual
+    def processar_ponto(self, pt_atual, dist_atual):
+        for pt in self.grafo.arcos[pt_atual]:
+            if pt not in self.visitados and (pt not in self.nao_visitados or self.nao_visitados[pt] > dist_atual + self.grafo.arcos[pt_atual][pt]):
+                self.nao_visitados[pt] = dist_atual + self.grafo.arcos[pt_atual][pt]
+                self.anterior[pt] = pt_atual
     
     def executar(self, pt_a, pt_b):
-        self.origem_destino = (pt_a, pt_b)
+        self.pt_a = pt_a
+        self.pt_b = pt_b
         self.nao_visitados[pt_a] = 0
-        pt_atual = None
-        while pt_atual != pt_b and self.nao_visitados:
-            self.num_passos += 1
+        
+        while self.nao_visitados:
             pt_atual, dist_atual = self.nao_visitados.popitem()
-            for pt in self.grafo.arcos[pt_atual]:
-                if pt not in self.visitados:
-                    self.processa_arco(pt_atual, dist_atual, pt, self.grafo.arcos[pt_atual][pt])            
+            self.processar_ponto(pt_atual, dist_atual)            
             self.visitados.add(pt_atual)
             self.dist_total = dist_atual
+            if pt_atual == pt_b:
+                break
     
     @property
     def caminho(self):
-        caminho = list()
-        pt_atual = self.origem_destino[1]
-        while pt_atual != self.origem_destino[0]:
-            caminho.append(pt_atual)
-            pt_atual = self.anterior[pt_atual]
+        if not self.__caminho:
+            self.__caminho = _caminho(self.anterior, self.pt_a, self.pt_b)
+        return self.__caminho
+        
+class AStar:
+
+    def __init__(self, grafo=Digrafo()):
+        self.grafo = grafo
+        self.pt_a = None
+        self.pt_b = None
+        self.anterior = {}
+        self.dist_total = 0
+        self.visitados = set()
+        self.nao_visitados = PQDict()
+        self.distancia = {}
+        self.__caminho = []
+    
+    def heuristica(self,pt):
+        #return 0
+        return self.grafo.dist(pt, self.pt_b)
+    
+    def processar_ponto(self, pt_atual, dist_atual):
+        for pt in self.grafo.arcos[pt_atual]:
+            if pt not in self.visitados and (pt not in self.distancia or self.distancia[pt] > dist_atual + self.grafo.arcos[pt_atual][pt]):
+                self.distancia[pt] = dist_atual + self.grafo.arcos[pt_atual][pt]
+                self.nao_visitados[pt] = dist_atual + self.grafo.arcos[pt_atual][pt] + self.heuristica(pt)
+                self.anterior[pt] = pt_atual
+    
+    def executar(self, pt_a, pt_b):
+        self.pt_a = pt_a
+        self.pt_b = pt_b
+        self.nao_visitados[pt_a] = 0 + self.heuristica(pt_a)
+        self.distancia[pt_a] = 0
+        
+        while self.nao_visitados:
+            pt_atual = self.nao_visitados.popitem()[0]
+            dist_atual = self.distancia[pt_atual]
+            self.processar_ponto(pt_atual, dist_atual)           
+            self.visitados.add(pt_atual)
+            self.dist_total = dist_atual
+            if pt_atual == pt_b:
+                break
+    
+    @property
+    def caminho(self):
+        if not self.__caminho:
+            self.__caminho = _caminho(self.anterior, self.pt_a, self.pt_b)
+        return self.__caminho
+                
+                
+def _caminho(anterior, pt_a, pt_b):
+    caminho = list()
+    pt_atual = pt_b
+    while pt_atual != pt_a:
         caminho.append(pt_atual)
-        caminho.reverse()
-        return caminho
+        if pt_atual == 0:
+            print('erroa: ',anterior,'\nerroc: ',caminho)
+        pt_atual = anterior[pt_atual]
+        
+    caminho.append(pt_atual)
+    caminho.reverse()
+    return caminho
         
