@@ -17,9 +17,9 @@ class Dijkstra:
         self.__caminho = []
     
     def processar_ponto(self, pt_atual, dist_atual):
-        for pt in self.grafo.arcos[pt_atual]:
-            if pt not in self.visitados and (pt not in self.nao_visitados or self.nao_visitados[pt] > dist_atual + self.grafo.arcos[pt_atual][pt]):
-                self.nao_visitados[pt] = dist_atual + self.grafo.arcos[pt_atual][pt]
+        for pt, dist in self.grafo.arcos[pt_atual]:
+            if pt not in self.visitados and (pt not in self.nao_visitados or self.nao_visitados[pt] > dist_atual + dist):
+                self.nao_visitados[pt] = dist_atual + dist
                 self.anterior[pt] = pt_atual
     
     def executar(self, pt_a, pt_b):
@@ -61,10 +61,10 @@ class AStar:
         return self.grafo.dist(pt, self.pt_b)
     
     def processar_ponto(self, pt_atual, dist_atual):
-        for pt in self.grafo.arcos[pt_atual]:
-            if pt not in self.visitados and (pt not in self.distancia or self.distancia[pt] > dist_atual + self.grafo.arcos[pt_atual][pt]):
-                self.distancia[pt] = dist_atual + self.grafo.arcos[pt_atual][pt]
-                self.nao_visitados[pt] = dist_atual + self.grafo.arcos[pt_atual][pt] + self.heuristica(pt)
+        for pt, dist in self.grafo.arcos[pt_atual]:
+            if pt not in self.visitados and (pt not in self.distancia or self.distancia[pt] > dist_atual + dist):
+                self.distancia[pt] = dist_atual + dist
+                self.nao_visitados[pt] = dist_atual + dist + self.heuristica(pt)
                 self.anterior[pt] = pt_atual
                 if pt_atual == 0:
                     print('processar', self.distancia[pt], self.nao_visitados[pt],self.anterior[pt])

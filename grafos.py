@@ -48,28 +48,15 @@ def gerar_aleatoriamente(grid_x, grid_y, max_x, max_y, distancia_min):
 
     fracao_x, fracao_y = max_x/grid_x, max_y/grid_y
     tam_min_x = tam_min_y = distancia_min / 2
-    tam_max_x = fracao_x - tam_min_x
-    tam_max_y = fracao_y - tam_min_y
+    tam_max_x, tam_max_y = fracao_x - tam_min_x, fracao_y - tam_min_y
 
     x_1, x_2, y_1, y_2 = tam_min_x, tam_max_x, tam_min_y, tam_max_y
-    #p_x = p_y = {}
 
     p_x = {i: (x_1 + fracao_x * (i + 1), x_2 + fracao_x * (i + 1)) for i in range(grid_x)}
     p_y = {i: (y_1 + fracao_y * (i + 1), y_2 + fracao_y * (i + 1)) for i in range(grid_y)}
-    #for i in range(grid_x):
-    #    p_x[i] = (x_1, x_2)
-    #    x_1 += fracao_x
-    #    x_2 += fracao_x
-    #for i in range(grid_y):
-    #    p_y[i] = (y_1, y_2)
-    #    y_1 += fracao_y
-    #    y_2 += fracao_y
 
     [grafo.add_ponto((key_x * mult_ident_ponto) + key_y, uniform(x[0], x[1]), uniform(y[0], y[1]))
      for key_x, x in p_x.items() for key_y, y in p_y.items()]
-    #for key_x, x in p_x.items():
-    #    for key_y, y in p_y.items():
-    #        grafo.add_ponto((key_x * mult_ident_ponto) + key_y, uniform(x[0], x[1]), uniform(y[0], y[1]))
 
     hor = []
     for i in range(grid_x):
@@ -99,7 +86,7 @@ def gerar_aleatoriamente(grid_x, grid_y, max_x, max_y, distancia_min):
 def gerar_distancia(grafo, pt_a, pt_b):
     distancia = 0
     while distancia < grafo.dist(pt_a, pt_b):
-        distancia = round(grafo.dist(pt_a, pt_b) * uniform(1.0,1.5))
+        distancia = round(grafo.dist(pt_a, pt_b) * uniform(1.0,1.5), 3)
         if distancia < grafo.dist(pt_a, pt_b):
-            distancia += 1
+            distancia += 0.05
     return distancia
