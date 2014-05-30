@@ -13,6 +13,7 @@ class Dijkstra:
         self.dist_total = 0
         self.visitados = set()
         self.nao_visitados = PQDict()
+        self.num_passos = 0
         self.__caminho = []
     
     def processar_ponto(self, pt_atual, dist_atual):
@@ -27,6 +28,7 @@ class Dijkstra:
         self.nao_visitados[pt_a] = 0
         
         while self.nao_visitados:
+            self.num_passos += 1
             pt_atual, dist_atual = self.nao_visitados.popitem()
             self.processar_ponto(pt_atual, dist_atual)            
             self.visitados.add(pt_atual)
@@ -51,6 +53,7 @@ class AStar:
         self.visitados = set()
         self.nao_visitados = PQDict()
         self.distancia = {}
+        self.num_passos = 0
         self.__caminho = []
     
     def heuristica(self,pt):
@@ -63,6 +66,8 @@ class AStar:
                 self.distancia[pt] = dist_atual + self.grafo.arcos[pt_atual][pt]
                 self.nao_visitados[pt] = dist_atual + self.grafo.arcos[pt_atual][pt] + self.heuristica(pt)
                 self.anterior[pt] = pt_atual
+                if pt_atual == 0:
+                    print('processar', self.distancia[pt], self.nao_visitados[pt],self.anterior[pt])
     
     def executar(self, pt_a, pt_b):
         self.pt_a = pt_a
@@ -71,8 +76,11 @@ class AStar:
         self.distancia[pt_a] = 0
         
         while self.nao_visitados:
+            self.num_passos += 1
             pt_atual = self.nao_visitados.popitem()[0]
             dist_atual = self.distancia[pt_atual]
+            if pt_atual == 0:
+                print('executar', pt_atual, dist_atual)
             self.processar_ponto(pt_atual, dist_atual)           
             self.visitados.add(pt_atual)
             self.dist_total = dist_atual
