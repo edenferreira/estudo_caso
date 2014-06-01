@@ -4,17 +4,25 @@ import os
 
 _nome_banco = 'grafo_db'
 
-def reiniciar_banco():
-    if os.path.isfile(_nome_banco):
-        os.remove(_nome_banco)
-    criar_banco_dados()
-
 def criar_banco_dados():
     con = Conexao()
     con.criar_table_ident()
     con.criar_tabela_grafos()
     con.criar_tabela_dijkstra()
     con.criar_tabela_astar()
+
+def reiniciar_banco():
+    if os.path.isfile(_nome_banco):
+        os.remove(_nome_banco)
+    criar_banco_dados()
+
+def criar_se_nao_existe():
+    if not os.path.isfile(_nome_banco):
+        con = Conexao()
+        con.criar_table_ident()
+        con.criar_tabela_grafos()
+        con.criar_tabela_dijkstra()
+        con.criar_tabela_astar()
 
 class Conexao:
 
@@ -101,6 +109,7 @@ class Conexao:
         comando_sql = """insert into informacao_grafo(id,num_pontos,num_arestas,cidade)
                          values(?,?,?,?)"""
         con = sql.connect(self.banco)
+        print((grafo.ident, len(grafo), grafo.num_arestas, cidade))
         con.execute(comando_sql, (grafo.ident, len(grafo), grafo.num_arestas, cidade))
         con.commit()
         con.close()

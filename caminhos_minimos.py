@@ -23,10 +23,10 @@ class Dijkstra:
                 self.nao_visitados[pt] = dist_atual + dist
                 self.anterior[pt] = pt_atual
     
-    def __executar(self, pt_a, pt_b):
-        self.pt_o = pt_a
-        self.pt_d = pt_b
-        self.nao_visitados[pt_a] = 0
+    def __executar(self, pt_o, pt_d):
+        self.pt_o = pt_o
+        self.pt_d = pt_d
+        self.nao_visitados[pt_o] = 0
         
         while self.nao_visitados:
             self.num_passos += 1
@@ -34,12 +34,12 @@ class Dijkstra:
             self.processar_ponto(pt_atual, dist_atual)
             self.visitados.add(pt_atual)
             self.dist_total = dist_atual
-            if pt_atual == pt_b:
+            if pt_atual == pt_d:
                 break
 
-    def executar(self, pt_a, pt_b):
+    def executar(self, pt_o, pt_d):
         t_ini = time()
-        self.__executar(pt_a, pt_b)
+        self.__executar(pt_o, pt_d)
         t_fim = time()
         self.tempo_execucao = round(t_fim - t_ini, 3)
 
@@ -76,11 +76,11 @@ class AStar:
                 if pt_atual == 0:
                     print('processar', self.distancia[pt], self.nao_visitados[pt],self.anterior[pt])
     
-    def __executar(self, pt_a, pt_b):
-        self.pt_o = pt_a
-        self.pt_d = pt_b
-        self.nao_visitados[pt_a] = 0 + self.heuristica(pt_a)
-        self.distancia[pt_a] = 0
+    def __executar(self, pt_o, pt_d):
+        self.pt_o = pt_o
+        self.pt_d = pt_d
+        self.nao_visitados[pt_o] = 0 + self.heuristica(pt_o)
+        self.distancia[pt_o] = 0
         
         while self.nao_visitados:
             self.num_passos += 1
@@ -91,12 +91,12 @@ class AStar:
             self.processar_ponto(pt_atual, dist_atual)           
             self.visitados.add(pt_atual)
             self.dist_total = dist_atual
-            if pt_atual == pt_b:
+            if pt_atual == pt_d:
                 break
 
-    def executar(self, pt_a, pt_b):
+    def executar(self, pt_o, pt_d):
         t_ini = time()
-        self.__executar(pt_a, pt_b)
+        self.__executar(pt_o, pt_d)
         t_fim = time()
         self.tempo_execucao = round(t_fim - t_ini, 3)
     
@@ -107,10 +107,10 @@ class AStar:
         return self.__caminho
                 
                 
-def _caminho(anterior, pt_a, pt_b):
+def _caminho(anterior, pt_o, pt_d):
     caminho = list()
-    pt_atual = pt_b
-    while pt_atual != pt_a:
+    pt_atual = pt_d
+    while pt_atual != pt_o:
         caminho.append(pt_atual)
         if pt_atual == 0:
             print('erroa: ',anterior,'\nerroc: ',caminho)

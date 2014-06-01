@@ -31,8 +31,8 @@ class Digrafo:
                      self.pos_pontos[pt_b][1] - self.pos_pontos[pt_a][1])
     
 
-def gerar_de_dataset(path):
-    g = Digrafo()
+def gerar_de_dataset(path, ident=None):
+    g = Digrafo(ident)
     with open(path+'.co','r') as arq:
         for e in arq.readlines():
             if e[0] == 'v':
@@ -46,8 +46,8 @@ def gerar_de_dataset(path):
                 g.add_arco(int(s[0]),int(s[1]),gerar_distancia(g,int(s[0]),int(s[1])))
     return g
    
-def gerar_aleatoriamente(grid_x, grid_y, max_x, max_y, distancia_min):
-    grafo = Digrafo()
+def gerar_aleatoriamente(grid_x, grid_y, max_x, max_y, distancia_min, ident=None):
+    grafo = Digrafo(ident)
 
     fracao_x, fracao_y = max_x/grid_x, max_y/grid_y
     tam_min_x = tam_min_y = distancia_min / 2
