@@ -18,29 +18,45 @@ def coletar_normal(repet):
         dij.executar(pt_o, pt_d)
         ast = AStar(grafo)
         ast.executar(pt_o, pt_d)
-        del dij
-        del ast
         con.inserir_tabela_dijkstra(dij)
         con.inserir_tabela_astar(ast)
+        del dij
+        del ast
 
         pt_o, pt_d = sample(grafo.pontos, 2)
         dij = Dijkstra(grafo)
         dij.executar(pt_o, pt_d)
         ast = AStar(grafo)
         ast.executar(pt_o, pt_d)
-        del dij
-        del ast
         con.inserir_tabela_dijkstra(dij)
         con.inserir_tabela_astar(ast)
+        del dij
+        del ast
 
         pt_o, pt_d = sample(grafo.pontos, 2)
         dij = Dijkstra(grafo)
         dij.executar(pt_o, pt_d)
         ast = AStar(grafo)
         ast.executar(pt_o, pt_d)
-        del dij
-        del ast
         con.inserir_tabela_dijkstra(dij)
         con.inserir_tabela_astar(ast)
+        del dij
+        del ast
+
+        imprimir_dados()
 
     del con
+
+def imprimir_dados():
+    con = Conexao()
+    d = con.get_tempos_dijkstra()
+    a = con.get_tempos_astar()
+    with open('dicionario_dados.txt','w') as arq:
+      print('Tempos dos Algoritmos',file=arq)
+      print('                    Dijkstra                 A*',file=arq)
+    with open('dicionario_dados.txt','a') as arq:
+      for i in range(len(d['id'])):
+        for key in d:
+          if key != 'id':
+            print(key.rjust(15),' : ',str(d[key][i]).ljust(20),' : ', str(a[key][i]),file=arq)
+        print(file=arq)

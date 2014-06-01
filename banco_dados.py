@@ -109,7 +109,6 @@ class Conexao:
         comando_sql = """insert into informacao_grafo(id,num_pontos,num_arestas,cidade)
                          values(?,?,?,?)"""
         con = sql.connect(self.banco)
-        print((grafo.ident, len(grafo), grafo.num_arestas, cidade))
         con.execute(comando_sql, (grafo.ident, len(grafo), grafo.num_arestas, cidade))
         con.commit()
         con.close()
