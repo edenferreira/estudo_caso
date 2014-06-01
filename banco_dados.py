@@ -120,7 +120,7 @@ class Conexao:
                          values(?,?,?,?,?,?,?)"""
         con = sql.connect(self.banco)
         con.execute(comando_sql, (
-            dij.pt_a, dij.pt_b, str(dij.caminho), dij.num_passos, dij.dist_total, dij.tempo_execucao, dij.grafo.ident))
+            dij.pt_o, dij.pt_d, str(dij.caminho), dij.num_passos, dij.dist_total, dij.tempo_execucao, dij.grafo.ident))
         con.commit()
         con.close()
         print("Dados de dijkstra inseridos corretamente")
@@ -130,7 +130,7 @@ class Conexao:
                          values(?,?,?,?,?,?,?)"""
         con = sql.connect(self.banco)
         con.execute(comando_sql, (
-            ast.pt_a, ast.pt_b, str(ast.caminho), ast.num_passos, ast.dist_total, ast.tempo_execucao, ast.grafo.ident))
+            ast.pt_o, ast.pt_d, str(ast.caminho), ast.num_passos, ast.dist_total, ast.tempo_execucao, ast.grafo.ident))
         con.commit()
         con.close()
         print("Dados de astar inseridos corretamente")
