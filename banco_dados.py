@@ -184,7 +184,7 @@ class Conexao:
         dados['tempo'] = [li[5] for li in lista]
         dados['id'] = [li[6] for li in lista]
         return dados
-
+        
     def get_tempos_dijkstra(self):
         comando_sql = """select d.id, g.num_pontos, g.num_arestas, d.ponto_origem, 
                                 d.ponto_destino, d.caminho, d.num_passos, 
@@ -194,21 +194,11 @@ class Conexao:
         con = sql.connect(self.banco)
         lista = self.get_lista_de_cursor(con.execute(comando_sql))
         con.close()
-        dados = {}
-        dados['id'] = [li[0] for li in lista]
-        dados['num_pontos'] = [li[1] for li in lista]
-        dados['num_arestas'] = [li[2] for li in lista]
-        dados['ponto_origem'] = [li[3] for li in lista]
-        dados['ponto_destino'] = [li[4] for li in lista]
-        caminhos = [li[5].strip('[').strip(']').split(',') for li in lista]
-        dados['caminho'] = []
-        for ca in caminhos:
-            dados['caminho'] += [int(pt) for pt in ca]
-        dados['tam_caminho'] = len(dados['caminho'])
-        dados['num_passos'] = [li[6] for li in lista]
-        dados['distancia_total'] = [li[7] for li in lista]
-        dados['tempo'] = [li[8] for li in lista]
-        return lista
+        dados = [('id','num_pontos','num_arestas','ponto_origem','ponto_destino','caminho','tam_caminho','num_passos','distancia_total','tempo')]
+        for e in lista:
+            c = [int(pt) for pt in e[5].strip('[').strip(']').split(',')]
+            dados.append((e[0],e[1],e[2],e[3],e[4],c,len(c),e[6],e[7],e[8]))
+        return dados
 
     def get_tempos_dijkstra_sem_caminho(self):
         comando_sql = """select g.id, g.num_pontos, g.num_arestas, d.ponto_origem, d.ponto_destino, d.num_passos, d.distancia_total, d.tempo
@@ -237,7 +227,7 @@ class Conexao:
             dados['tempo'].append(linha[7])
         con.close()
         return dados
-
+        
     def get_tempos_astar(self):
         comando_sql = """select a.id, g.num_pontos, g.num_arestas, a.ponto_origem, 
                                 a.ponto_destino, a.caminho, a.num_passos, 
@@ -247,21 +237,11 @@ class Conexao:
         con = sql.connect(self.banco)
         lista = self.get_lista_de_cursor(con.execute(comando_sql))
         con.close()
-        dados = {}
-        dados['id'] = [li[0] for li in lista]
-        dados['num_pontos'] = [li[1] for li in lista]
-        dados['num_arestas'] = [li[2] for li in lista]
-        dados['ponto_origem'] = [li[3] for li in lista]
-        dados['ponto_destino'] = [li[4] for li in lista]
-        caminhos = [li[5].strip('[').strip(']').split(',') for li in lista]
-        dados['caminho'] = []
-        for ca in caminhos:
-            dados['caminho'] += [int(pt) for pt in ca]
-        dados['tam_caminho'] = len(dados['caminho'])
-        dados['num_passos'] = [li[6] for li in lista]
-        dados['distancia_total'] = [li[7] for li in lista]
-        dados['tempo'] = [li[8] for li in lista]
-        return lista
+        dados = [('id','num_pontos','num_arestas','ponto_origem','ponto_destino','caminho','tam_caminho','num_passos','distancia_total','tempo')]
+        for e in lista:
+            c = [int(pt) for pt in e[5].strip('[').strip(']').split(',')]
+            dados.append((e[0],e[1],e[2],e[3],e[4],c,len(c),e[6],e[7],e[8]))
+        return dados
 
     def get_tempos_astar_sem_caminho(self):
         comando_sql = """select g.id, g.num_pontos, g.num_arestas, a.ponto_origem, a.ponto_destino, a.num_passos, a.distancia_total, a.tempo
