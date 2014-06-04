@@ -186,10 +186,11 @@ class Conexao:
         return dados
 
     def get_tempos_dijkstra(self):
-        comando_sql = """select g.id, g.num_pontos, g.num_arestas, d.ponto_origem, d.ponto_destino, d.caminho, d.num_passos, d.distancia_total, d.tempo
-                       from informacao_grafo g,
-                            informacao_dijkstra d
-                      where g.id = d.id;"""
+        comando_sql = """select d.id, g.num_pontos, g.num_arestas, d.ponto_origem, 
+                                d.ponto_destino, d.caminho, d.num_passos, 
+                                d.distancia_total, d.tempo
+                           from informacao_grafo g, informacao_dijkstra d
+                          where g.id = d.id;"""
         con = sql.connect(self.banco)
         lista = self.get_lista_de_cursor(con.execute(comando_sql))
         con.close()
@@ -203,6 +204,7 @@ class Conexao:
         dados['caminho'] = []
         for ca in caminhos:
             dados['caminho'] += [int(pt) for pt in ca]
+        dados['tam_caminho'] = len(dados['caminho'])
         dados['num_passos'] = [li[6] for li in lista]
         dados['distancia_total'] = [li[7] for li in lista]
         dados['tempo'] = [li[8] for li in lista]
@@ -237,9 +239,10 @@ class Conexao:
         return dados
 
     def get_tempos_astar(self):
-        comando_sql = """select g.id, g.num_pontos, g.num_arestas, a.ponto_origem, a.ponto_destino, a.caminho, a.num_passos, a.distancia_total, a.tempo
-                           from informacao_grafo g,
-                                informacao_astar a
+        comando_sql = """select a.id, g.num_pontos, g.num_arestas, a.ponto_origem, 
+                                a.ponto_destino, a.caminho, a.num_passos, 
+                                a.distancia_total, a.tempo
+                           from informacao_grafo g, informacao_astar a
                           where g.id = a.id;"""
         con = sql.connect(self.banco)
         lista = self.get_lista_de_cursor(con.execute(comando_sql))
@@ -254,6 +257,7 @@ class Conexao:
         dados['caminho'] = []
         for ca in caminhos:
             dados['caminho'] += [int(pt) for pt in ca]
+        dados['tam_caminho'] = len(dados['caminho'])
         dados['num_passos'] = [li[6] for li in lista]
         dados['distancia_total'] = [li[7] for li in lista]
         dados['tempo'] = [li[8] for li in lista]
