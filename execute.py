@@ -5,7 +5,7 @@ from time import sleep
 
 repet = int(sys.argv[1])
 for i in range(repet):
-    print(repet)
+    print(i)
     coletar_normal()
     sleep(1)
     imprimir_dados()
