@@ -8,9 +8,9 @@ from banco_dados import *
 def coletar_normal():
     criar_se_nao_existe()
     con = Conexao()
-    _x = randint(1000,2225)
-    _y = randint(1000,2225)
-    grafo = gerar_aleatoriamente(_x, _y, _x-500, _y-500, uniform(0.1,2), con.get_ident())
+    _x = randint(1000,1500)
+    _y = randint(1000,1500)
+    grafo = gerar_aleatoriamente(_x, _y, _x//2, _y//2, uniform(0.1,2), con.get_ident())
     print('grafo')
     con.inserir_grafo(grafo)
 
