@@ -5,14 +5,17 @@ from grafos import *
 from caminhos_minimos import *
 from banco_dados import *
 from pprint import pprint
+from time import time
 
 def coletar_normal():
     criar_se_nao_existe()
     con = Conexao()
     _x = randint(1000,1500)
     _y = randint(1000,1500)
+    t_1 = time()
     grafo = gerar_aleatoriamente(_x, _y, _x//2, _y//2, uniform(0.1,2), con.get_ident())
-    print('grafo')
+    t_2 = time()
+    print('grafo %.3f' % (t_2-t_1))
     con.inserir_grafo(grafo)
 
     pt_o, pt_d = sample(grafo.pontos, 2)

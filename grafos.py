@@ -78,7 +78,7 @@ def gerar_aleatoriamente(grid_x, grid_y, max_x, max_y, distancia_min, ident=None
     [grafo.add_arco(ver[i], ver[i + 1], gerar_distancia(grafo, ver[i], ver[i + 1])) for i in range(len(ver) - 1)]
 
     li = list(grafo.pontos)
-    for i in range(len(grafo)//50):
+    for i in range(len(grafo)//randint(20,200)):
         pt_a = li[randrange(len(li))]
         pt_b = li[randrange(len(li))]
         grafo.add_arco(pt_a, pt_b, gerar_distancia(grafo,pt_a,pt_b))
@@ -90,5 +90,5 @@ def gerar_distancia(grafo, pt_a, pt_b):
     while distancia < grafo.dist(pt_a, pt_b):
         distancia = round(grafo.dist(pt_a, pt_b) * uniform(1.0,1.5), 3)
         if distancia < grafo.dist(pt_a, pt_b):
-            distancia += 0.05
+            distancia += 0.001
     return distancia

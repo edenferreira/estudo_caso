@@ -2,7 +2,7 @@ author = 'Eden Thiago Ferreira'
 import sqlite3 as sql
 import os
 
-_nome_banco = 'grafo_db'
+_nome_banco = 'grafo_db_final'
 
 def criar_banco_dados():
     con = Conexao()
