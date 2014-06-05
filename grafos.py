@@ -1,7 +1,7 @@
 author = 'Eden Thiago Ferreira'
 from random import *
 from collections import defaultdict
-from math import hypot
+import math
 
 
 _mult_ident_ponto = 10000000 #Multiplicador para identificacao unica de cada ponto adicionado
@@ -27,17 +27,18 @@ class Digrafo:
         self.arcos[pt_a].append((pt_b, peso))
 
     def dist(self, pt_a, pt_b):
-        return __dist(self.pos_pontos[pt_a], self.pos_pontos[pt_b])
-        #return hypot(self.pos_pontos[pt_b][0] - self.pos_pontos[pt_a][0], self.pos_pontos[pt_b][1] - self.pos_pontos[pt_a][1])
+        return self.__dist(self.pos_pontos[pt_a], self.pos_pontos[pt_b])
+        #return math.hypot(self.pos_pontos[pt_b][0] - self.pos_pontos[pt_a][0], self.pos_pontos[pt_b][1] - self.pos_pontos[pt_a][1])
     
     def __dist(self, pt_a, pt_b):
-        lat1, lon1 = origin
-        lat2, lon2 = destination
+        lat1, lon1 = pt_a
+        lat2, lon2 = pt_b
         radius = 6371 # km
 
         dlat = math.radians(lat2-lat1)
         dlon = math.radians(lon2-lon1)
-        a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
+        a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) \
+                                                  * math.sin(dlon/2) * math.sin(dlon/2)
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         d = radius * c
 

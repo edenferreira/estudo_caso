@@ -50,10 +50,10 @@ def imprimir_dados():
     con = Conexao()
     d = con.get_tempos_dijkstra_sem_caminho()
     a = con.get_tempos_astar_sem_caminho()
-    with open(r'dicionario_dados.txt','w') as arq:
+    with open(r'/var/ftp/pub/dicionario_dados.txt','w') as arq:
         print('Tempos dos Algoritmos',file=arq)
         print('                    Dijkstra                 A*',file=arq)
-    with open(r'dicionario_dados.txt','a') as arq:
+    with open(r'/var/ftp/pub/dicionario_dados.txt','a') as arq:
         for i in range(len(d['id'])):
             for key in d:
                 if key != 'id':
@@ -67,13 +67,13 @@ def recuperar_dados():
     con = Conexao()
     d = con.get_tempos_dijkstra()
     a = con.get_tempos_astar()
-    with open('dijkstra.txt','w') as arq:
+    with open('/var/ftp/pub/dijkstra.txt','w') as arq:
         for e in d:
             for f in e:
                 if f != e[5]:
                     print(f,end=',',file=arq)
             print(file=arq)
-    with open('astar.txt','w') as arq:
+    with open('/var/ftp/pub/astar.txt','w') as arq:
         for e in a:
             for f in e:
                 if f != e[5]:
