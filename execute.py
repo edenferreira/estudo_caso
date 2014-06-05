@@ -3,8 +3,7 @@ import sys
 from coletar_dados import *
 from time import sleep
 
-#repet = int(sys.argv[1])
-repet = 1
+repet = int(sys.argv[1])
 for i in range(repet):
     print(i)
     coletar_normal()
