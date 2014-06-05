@@ -10,5 +10,5 @@ for i in range(repet):
     sleep(1)
     imprimir_dados()
     sleep(1)
-recuperar_dados()
+	recuperar_dados()
 
