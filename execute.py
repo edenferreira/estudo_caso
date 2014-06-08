@@ -12,3 +12,6 @@ for i in range(repet):
     sleep(1)
     recuperar_dados()
 
+coletar_dataset(100)
+imprimir_dados(True)
+recuperar_dados(True)

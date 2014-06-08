@@ -4,30 +4,46 @@ import os
 
 _nome_banco = 'grafo_db_final'
 
-def criar_banco_dados():
-    con = Conexao()
+def criar_banco_dados(dataset=False):
+    con = Conexao(dataset)
     con.criar_table_ident()
     con.criar_tabela_grafos()
     con.criar_tabela_dijkstra()
     con.criar_tabela_astar()
 
-def reiniciar_banco():
-    if os.path.isfile(_nome_banco):
-        os.remove(_nome_banco)
-    criar_banco_dados()
+def reiniciar_banco(dataset=False):
+    if dataset:
+        if os.path.isfile('grafo_dataset'):
+            os.remove('grafo_dataset')
+        criar_banco_dados(dataset)
+    else:
+        if os.path.isfile(_nome_banco):
+            os.remove(_nome_banco)
+        criar_banco_dados(dataset)
 
-def criar_se_nao_existe():
-    if not os.path.isfile(_nome_banco):
-        con = Conexao()
-        con.criar_table_ident()
-        con.criar_tabela_grafos()
-        con.criar_tabela_dijkstra()
-        con.criar_tabela_astar()
+def criar_se_nao_existe(dataset=False):
+    if dataset:
+        if not os.path.isfile('grafo_dataset'):
+            con = Conexao(dataset)
+            con.criar_table_ident()
+            con.criar_tabela_grafos()
+            con.criar_tabela_dijkstra()
+            con.criar_tabela_astar()
+    else:
+        if not os.path.isfile(_nome_banco):
+            con = Conexao(dataset)
+            con.criar_table_ident()
+            con.criar_tabela_grafos()
+            con.criar_tabela_dijkstra()
+            con.criar_tabela_astar()
 
 class Conexao:
 
-    def __init__(self):
-        self.banco = _nome_banco
+    def __init__(self,dataset=False):
+        if dataset:
+            self.banco = 'grafo_dataset'
+        else:
+            self.banco = _nome_banco
 
     def __str__(self):
         return self.banco
