@@ -8,6 +8,8 @@ from pprint import pprint
 from time import time
 
 def coletar_dataset(repet):
+    if repet == 0:
+        return
     criar_se_nao_existe(True)
     con = Conexao(True)
     print('NE')
@@ -64,8 +66,8 @@ def coletar_dataset(repet):
 def coletar_normal():
     criar_se_nao_existe()
     con = Conexao()
-    _x = randint(1000,1500)
-    _y = randint(1000,1500)
+    _x = randint(300,500)
+    _y = randint(300,500)
     t_1 = time()
     grafo = gerar_aleatoriamente(_x, _y, _x//2, _y//2, uniform(0.1,2), con.get_ident())
     t_2 = time()
@@ -109,9 +111,9 @@ def imprimir_dados(dataset=False):
     a = con.get_tempos_astar_sem_caminho()
     d_nome = ''
     if dataset:
-        d_nome = 'd_dicionario_dados.txt'
+        d_nome = 'd_dados.txt'
     else:
-        d_nome = 'dicionario_dados.txt'
+        d_nome = 'dados.txt'
     with open(d_nome,'w') as arq:
         print('Tempos dos Algoritmos',file=arq)
         print('                    Dijkstra                 A*',file=arq)
